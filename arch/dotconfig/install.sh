@@ -28,6 +28,7 @@ backup_config
 
 # Replace contents of ~/.config/hypr with contents of hypr directory
 rm -rf ~/.config/hypr/
+mkdir ~/.config/hypr/
 cp  hypr/hyprland.conf ~/.config/hypr/hyprland.conf
 echo "Configuration replaced in ~/.config/hypr"
 
