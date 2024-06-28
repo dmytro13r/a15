@@ -36,18 +36,12 @@ sudo chown -R $(whoami):$(whoami) yay
 cd yay
 makepkg -si --noconfirm
 
-# Install NVIDIA drivers and utilities
-sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings --noconfirm
-yay -S libva libva-nvidia-driver-git linux-headers
+# Install NVIDIA / AMD GPU drivers and utilities
+sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-video-amdgpu --noconfirm
+yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 
-# Install AMD GPU drivers
-sudo pacman -S xf86-video-amdgpu --noconfirm
-
-# Install ASUS Control
-yay -S asusctl supergfxctl --noconfirm
-
-# Install related utilities
-yay -S waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm google-chrome firefox timeshift
+# Install ASUS Control and related utilities
+yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim --noconfirm
 
 # Configure NVIDIA settings for Wayland and Hyprland
 backup_file "/etc/modprobe.d/nvidia.conf"
