@@ -30,6 +30,3 @@ backup_config
 rm -rf ~/.config/hypr/*
 cp -r hypr/* ~/.config/hypr/
 echo "Configuration replaced in ~/.config/hypr"
-
-# Reload Hyprland if needed
-reload_hyprland
