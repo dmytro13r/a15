@@ -38,6 +38,7 @@ makepkg -si --noconfirm
 
 # Install NVIDIA drivers and utilities
 sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings --noconfirm
+yay -S libva libva-nvidia-driver-git linux-headers
 
 # Install AMD GPU drivers
 sudo pacman -S xf86-video-amdgpu --noconfirm
