@@ -50,7 +50,7 @@ yay -S waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm
 
 # Configure NVIDIA settings for Wayland and Hyprland
 backup_file "/etc/modprobe.d/nvidia.conf"
-add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1"
+add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1 fbdev=1"
 
 # Add NVIDIA modules to mkinitcpio.conf
 backup_file "/etc/mkinitcpio.conf"
