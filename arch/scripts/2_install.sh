@@ -41,7 +41,7 @@ sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-
 yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 
 # Install ASUS Control and related utilities
-yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim --noconfirm
+yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock --noconfirm
 
 # Configure NVIDIA settings for Wayland and Hyprland
 backup_file "/etc/modprobe.d/nvidia.conf"
