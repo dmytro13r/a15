@@ -15,6 +15,14 @@ add_module_if_not_exists() {
     fi
 }
 
+# Backup function
+backup_file() {
+    local file="$1"
+    local backup_dir="$HOME/backups/installer_script/$(date +%Y-%m-%d)"
+    mkdir -p "$backup_dir"
+    cp "$file" "$backup_dir/$(basename $file).$(date +%H%M%S)"
+}
+
 # Update the system
 sudo pacman -Syu --noconfirm
 
@@ -37,13 +45,15 @@ sudo pacman -S xf86-video-amdgpu --noconfirm
 # Install ASUS Control
 yay -S asusctl supergfxctl --noconfirm
 
-# Install Hyprland and related utilities
-yay -S hyprland-git waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm
+# Install related utilities
+yay -S waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm
 
 # Configure NVIDIA settings for Wayland and Hyprland
+backup_file "/etc/modprobe.d/nvidia.conf"
 add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1"
 
 # Add NVIDIA modules to mkinitcpio.conf
+backup_file "/etc/mkinitcpio.conf"
 add_module_if_not_exists "nvidia"
 add_module_if_not_exists "nvidia_modeset"
 add_module_if_not_exists "nvidia_uvm"
@@ -52,7 +62,8 @@ add_module_if_not_exists "nvidia_drm"
 # Generate new initramfs
 sudo mkinitcpio -P
 
-# Set environment variables for Hyprland
+# Set environment variables for Wayland
+backup_file "$HOME/.bashrc"
 add_line_if_not_exists "$HOME/.bashrc" 'export LIBVA_DRIVER_NAME=nvidia'
 add_line_if_not_exists "$HOME/.bashrc" 'export XDG_SESSION_TYPE=wayland'
 add_line_if_not_exists "$HOME/.bashrc" 'export GBM_BACKEND=nvidia-drm'
@@ -66,12 +77,12 @@ add_line_if_not_exists "$HOME/.bashrc" 'export PATH=$PATH:$HOME/scripts'
 # Reload bashrc
 source "$HOME/.bashrc"
 
-# Configure systemd-boot
-sudo bash -c 'echo "options nvidia-drm.modeset=1" >> /boot/loader/entries/arch.conf'
-
 # Enable services for suspend and resume
 sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
 
+# Fix for GDM login issue
+sudo mkdir -p /etc/systemd/system/gdm.service.d
+sudo bash -c 'echo -e "[Service]\nExecStartPre=/bin/sleep 3" > /etc/systemd/system/gdm.service.d/override.conf'
+
 # Reboot to apply changes
-echo "Installation complete. The system will now reboot."
-sudo reboot
+echo "Installation complete."
