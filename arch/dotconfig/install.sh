@@ -27,9 +27,8 @@ reload_hyprland() {
 backup_config
 
 # Replace contents of ~/.config/hypr with contents of hypr directory
-rm -rf ~/.config/hypr/
-mkdir ~/.config/hypr/
-cp  hypr/hyprland.conf ~/.config/hypr/hyprland.conf
+rm -rf ~/.config/hypr/*
+cp -r hypr/* ~/.config/hypr/
 echo "Configuration replaced in ~/.config/hypr"
 
 # Reload Hyprland if needed
