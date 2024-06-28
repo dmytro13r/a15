@@ -47,7 +47,7 @@ sudo pacman -S xf86-video-amdgpu --noconfirm
 yay -S asusctl supergfxctl --noconfirm
 
 # Install related utilities
-yay -S waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm
+yay -S waybar-hyprland wlogout swww xdg-desktop-portal-hyprland --noconfirm google-chrome firefox timeshift
 
 # Configure NVIDIA settings for Wayland and Hyprland
 backup_file "/etc/modprobe.d/nvidia.conf"
