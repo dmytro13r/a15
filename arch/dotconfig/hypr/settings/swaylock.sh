@@ -1,0 +1,1 @@
+swaylock -f --color 1e1e2eFF
