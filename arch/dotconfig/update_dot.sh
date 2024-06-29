@@ -17,5 +17,5 @@ backup_config
 # Replace contents of ~/.config/hypr with contents
 
 rm -rf ~/.config/hypr/*
-cp -r ~/a15/arch/dotconfig/hypr/* ~/.config/hypr/*
+cp -r ~/a15/arch/dotconfig/hypr/* ~/.config/hypr/
 echo "Configuration replaced in ~/.config/hypr"
