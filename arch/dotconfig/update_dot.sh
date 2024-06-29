@@ -21,7 +21,7 @@ reload_hyprland() {
         echo "Script finished without reloading Hyprland"
     fi
 }
-
+git -C ~/a15 pull
 # Main script execution
 # Create backup if needed
 backup_config

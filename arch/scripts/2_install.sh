@@ -68,6 +68,7 @@ add_line_if_not_exists "$HOME/.bashrc" 'export WLR_NO_HARDWARE_CURSORS=1'
 # Create scripts directory in home folder and add it to PATH
 mkdir -p "$HOME/scripts"
 add_line_if_not_exists "$HOME/.bashrc" 'export PATH=$PATH:$HOME/scripts'
+ln -s ~/a15/arch/dotconfig/update_dot.sh ~/scripts/update_dot.sh
 
 # Reload bashrc
 source "$HOME/.bashrc"
