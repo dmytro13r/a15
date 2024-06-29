@@ -27,7 +27,7 @@ backup_file() {
 sudo pacman -Syu --noconfirm
 
 # Install essential packages
-sudo pacman -S base-devel git wget --noconfirm
+sudo pacman -S base-devel git wget polkit-kde-agent --noconfirm
 
 # Install yay for AUR packages
 cd /opt
