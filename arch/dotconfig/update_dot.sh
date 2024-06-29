@@ -4,18 +4,42 @@
 backup_config() {
     read -p "Do you want to make a backup of the current configuration? (y/n): " backup_choice
     if [ "$backup_choice" == "y" ]; then
-        backup_dir=~/backups/hypr/$(date +%Y-%m-%d)/hypr_$(date +%s)
-        mkdir -p "$backup_dir"
-        cp -r ~/.config/hypr/* "$backup_dir"
-        echo "Backup created at $backup_dir"
+        backup_dir=~/backups/$(date +%Y-%m-%d)/$(date +%s)
+
+        # Create backup directories with timestamps if they do not exist
+        mkdir -p "$backup_dir/hypr"
+        mkdir -p "$backup_dir/waybar"
+
+        # Check if directories were created successfully
+        if [ ! -d "$backup_dir/hypr" ]; then
+            echo "Failed to create backup directory: $backup_dir/hypr"
+            exit 1
+        fi
+        if [ ! -d "$backup_dir/waybar" ]; then
+            echo "Failed to create backup directory: $backup_dir/waybar"
+            exit 1
+        fi
+
+        # Backup hypr directory
+        cp -r ~/.config/hypr/* "$backup_dir/hypr/"
+        echo "Backup created for hypr directory at $backup_dir/hypr"
+
+        # Backup waybar directory
+        cp -r ~/.config/waybar/* "$backup_dir/waybar/"
+        echo "Backup created for waybar directory at $backup_dir/waybar"
     fi
 }
+
 # Main script execution
 # Create backup if needed
 backup_config
 
-# Replace contents of ~/.config/hypr with contents
-
+# Replace contents of ~/.config/hypr with contents from ~/a15/arch/dotconfig/hypr
 rm -rf ~/.config/hypr/*
 cp -r ~/a15/arch/dotconfig/hypr/* ~/.config/hypr/
 echo "Configuration replaced in ~/.config/hypr"
+
+# Replace contents of ~/.config/waybar with contents from ~/a15/arch/dotconfig/waybar
+rm -rf ~/.config/waybar/*
+cp -r ~/a15/arch/dotconfig/waybar/* ~/.config/waybar/
+echo "Configuration replaced in ~/.config/waybar"
