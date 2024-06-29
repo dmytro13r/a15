@@ -10,26 +10,12 @@ backup_config() {
         echo "Backup created at $backup_dir"
     fi
 }
-
-# Function to reload Hyprland if requested by the user
-reload_hyprland() {
-    read -p "Do you want to reload Hyprland? (y/n): " reload_choice
-    if [ "$reload_choice" == "y" ]; then
-        hyprctl reload
-        echo "Hyprland reloaded"
-    else
-        echo "Script finished without reloading Hyprland"
-    fi
-}
-git -C ~/a15 pull
 # Main script execution
 # Create backup if needed
 backup_config
 
 # Replace contents of ~/.config/hypr with contents
-# Reload Hyprland if needed
-reload_hyprland
-of hypr directory
+
 rm -rf ~/.config/hypr/*
-cp -r hypr/* ~/.config/hypr/
+cp -r ~/a15/arch/dotconfig/hypr/* ~/.config/hypr/
 echo "Configuration replaced in ~/.config/hypr"
