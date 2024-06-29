@@ -41,7 +41,7 @@ sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-
 yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 
 # Install ASUS Control and related utilities
-yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock waybar gucharmap otf-font-awesome ttf-arimo-nerd noto-fonts --noconfirm
+yay -S asusctl supergfxctl power-profiles-daemon waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock waybar gucharmap otf-font-awesome ttf-arimo-nerd noto-fonts pycharm-community-edition --noconfirm
 
 # Call the Pipewire installation script
 source "$(pwd)/services/pipewire.sh"
@@ -77,8 +77,7 @@ ln -s ~/a15/arch/dotconfig/update_dot.sh ~/scripts/update_dot.sh
 source "$HOME/.bashrc"
 
 # Enable services for suspend and resume
-sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
-
+sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service power-profiles-daemon.service
 # Fix for GDM login issue
 sudo mkdir -p /etc/systemd/system/gdm.service.d
 sudo bash -c 'echo -e "[Service]\nExecStartPre=/bin/sleep 3" > /etc/systemd/system/gdm.service.d/override.conf'
