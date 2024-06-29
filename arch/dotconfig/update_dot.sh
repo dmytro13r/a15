@@ -88,3 +88,6 @@ echo "Configuration replaced in ~/.config/wlogout"
 
 pkill waybar && hyprctl dispatch exec waybar
 echo "Reloaded waybar configuration"
+
+swaync-client -R
+echo "Reloaded swaync configuration"
