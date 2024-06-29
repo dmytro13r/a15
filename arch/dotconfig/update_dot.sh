@@ -85,3 +85,6 @@ echo "Configuration replaced in ~/.config/swaync"
 rm -rf ~/.config/wlogout/*
 cp -r ~/a15/arch/dotconfig/wlogout/* ~/.config/wlogout/
 echo "Configuration replaced in ~/.config/wlogout"
+
+pkill waybar && hyprctl dispatch exec waybar
+echo "Reloaded waybar configuration"
