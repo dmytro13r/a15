@@ -326,6 +326,10 @@ label:focus {
     background-color: #0069d4;
 }
 
+#custom-notification {
+  font-family: "NotoSansMono Nerd Font";
+}
+
 #custom-power {
     background-color: #ffa000;
 }
