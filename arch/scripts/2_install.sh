@@ -43,6 +43,9 @@ yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 # Install ASUS Control and related utilities
 yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock --noconfirm
 
+# Call the Pipewire installation script
+source "$(pwd)/services/pipewire.sh"
+
 # Configure NVIDIA settings for Wayland and Hyprland
 backup_file "/etc/modprobe.d/nvidia.conf"
 add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1 fbdev=1"
