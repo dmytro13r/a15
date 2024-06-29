@@ -41,7 +41,7 @@ sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-
 yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 
 # Install ASUS Control and related utilities
-yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock --noconfirm
+yay -S asusctl supergfxctl waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome firefox timeshift slurp grim swayidle swaylock waybar --noconfirm
 
 # Call the Pipewire installation script
 source "$(pwd)/services/pipewire.sh"
@@ -82,6 +82,9 @@ sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-res
 # Fix for GDM login issue
 sudo mkdir -p /etc/systemd/system/gdm.service.d
 sudo bash -c 'echo -e "[Service]\nExecStartPre=/bin/sleep 3" > /etc/systemd/system/gdm.service.d/override.conf'
+
+# Waybar module for keyboard status (Caps lock and Num lock) requires the user to be part of the “input” group
+sudo gpasswd -a $USER input
 
 # Reboot to apply changes
 echo "Installation complete."
