@@ -41,7 +41,7 @@ sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-
 yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
 
 # Install ASUS Control and related utilities
-yay -S asusctl rog-control-center supergfxctl power-profiles-daemon waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome jq telegram-desktop firefox discord keepass timeshift slurp grim swayidle swaylock swaync waybar gucharmap otf-font-awesome ttf-arimo-nerd noto-fonts networkmanager pycharm-community-edition --noconfirm
+yay -S asusctl rog-control-center supergfxctl power-profiles-daemon waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome jq pavucontrol telegram-desktop firefox discord keepass timeshift slurp grim swayidle swaylock swaync waybar gucharmap otf-font-awesome ttf-arimo-nerd noto-fonts networkmanager pycharm-community-edition --noconfirm
 sudo pacman -S terraform terragrunt mate-calc acpi psensor --noconfirm
 # Call the Pipewire installation script
 source "$(pwd)/services/pipewire.sh"
