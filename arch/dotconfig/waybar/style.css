@@ -330,6 +330,14 @@ label:focus {
   font-family: "NotoSansMono Nerd Font";
 }
 
+#custom-language {
+    background: #00b093;
+    color: #ffffff;
+    padding: 0 10px;
+    margin: 0 5px;
+    min-width: 20px;
+}
+
 #custom-power {
     background-color: #ffa000;
 }

@@ -26,9 +26,9 @@
         "temperature",
         "backlight",
         "keyboard-state",
-        "sway/language",
         "battery",
         "battery#bat2",
+        "custom/language",
         "clock",
         "tray",
         "custom/notification",
@@ -226,5 +226,12 @@
         "format": " ⏻ ",
         "tooltip": false,
         "on-click": "wlogout --protocol layer-shell"
+    },
+    "custom/language": {
+        "exec": "hyprctl devices -j | jq -r '.keyboards[] | select(.main == true) | .active_keymap'",
+        "interval": 1,
+        "format": " {}",
+        "format-alt": "{}",
+        "tooltip": false
     }
 }

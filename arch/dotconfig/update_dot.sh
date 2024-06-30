@@ -7,87 +7,53 @@ backup_config() {
         backup_dir=~/backups/$(date +%Y-%m-%d)/$(date +%s)
 
         # Create backup directories with timestamps if they do not exist
-        mkdir -p "$backup_dir/hypr"
-        mkdir -p "$backup_dir/waybar"
-        mkdir -p "$backup_dir/swaylock"
-        mkdir -p "$backup_dir/swaync"
-        mkdir -p "$backup_dir/wlogout"
+        mkdir -p "$backup_dir/hypr" "$backup_dir/waybar" "$backup_dir/swaylock" "$backup_dir/swaync" "$backup_dir/wlogout"
 
         # Check if directories were created successfully
-        if [ ! -d "$backup_dir/hypr" ]; then
-            echo "Failed to create backup directory: $backup_dir/hypr"
-            exit 1
-        fi
-        if [ ! -d "$backup_dir/waybar" ]; then
-            echo "Failed to create backup directory: $backup_dir/waybar"
-            exit 1
-        fi
-        if [ ! -d "$backup_dir/swaylock" ]; then
-            echo "Failed to create backup directory: $backup_dir/swaylock"
-            exit 1
-        fi
-        if [ ! -d "$backup_dir/swaync" ]; then
-            echo "Failed to create backup directory: $backup_dir/swaync"
-            exit 1
-        fi
-        if [ ! -d "$backup_dir/wlogout" ]; then
-            echo "Failed to create backup directory: $backup_dir/wlogout"
-            exit 1
-        fi
+        for dir in hypr waybar swaylock swaync wlogout; do
+            if [ ! -d "$backup_dir/$dir" ]; then
+                echo "Failed to create backup directory: $backup_dir/$dir"
+                exit 1
+            fi
+        done
 
-        # Backup hypr directory
-        cp -r ~/.config/hypr/* "$backup_dir/hypr/"
-        echo "Backup created for hypr directory at $backup_dir/hypr"
-
-        # Backup waybar directory
-        cp -r ~/.config/waybar/* "$backup_dir/waybar/"
-        echo "Backup created for waybar directory at $backup_dir/waybar"
-
-        # Backup swaylock directory
-        cp -r ~/.config/swaylock/* "$backup_dir/swaylock/"
-        echo "Backup created for swaylock directory at $backup_dir/swaylock"
-
-        # Backup swaync directory
-        cp -r ~/.config/swaync/* "$backup_dir/swaync/"
-        echo "Backup created for swaync directory at $backup_dir/swaync"
-
-        # Backup wlogout directory
-        cp -r ~/.config/wlogout/* "$backup_dir/wlogout/"
-        echo "Backup created for wlogout directory at $backup_dir/wlogout"
+        # Backup directories
+        for dir in hypr waybar swaylock swaync wlogout; do
+            cp -r ~/.config/$dir/* "$backup_dir/$dir/"
+            echo "Backup created for $dir directory at $backup_dir/$dir"
+        done
     fi
 }
 
 # Main script execution
+echo "Script started at $(date)"
+
 # Create backup if needed
 backup_config
 
-# Replace contents of ~/.config/hypr with contents from ~/a15/arch/dotconfig/hypr
-rm -rf ~/.config/hypr/*
-cp -r ~/a15/arch/dotconfig/hypr/* ~/.config/hypr/
-echo "Configuration replaced in ~/.config/hypr"
+# Replace configurations
+for dir in hypr waybar swaylock swaync wlogout; do
+    rm -rf ~/.config/$dir/*
+    cp -r ~/a15/arch/dotconfig/$dir/* ~/.config/$dir/
+    echo "Configuration replaced in ~/.config/$dir"
+done
 
-# Replace contents of ~/.config/waybar with contents from ~/a15/arch/dotconfig/waybar
-rm -rf ~/.config/waybar/*
-cp -r ~/a15/arch/dotconfig/waybar/* ~/.config/waybar/
-echo "Configuration replaced in ~/.config/waybar"
+# Restart Waybar and related services
+echo "Restarting Waybar..."
+pkill waybar
+sleep 1  # Give some time for Waybar to be killed
+waybar &
 
-# Replace contents of ~/.config/swaylock with contents from ~/a15/arch/dotconfig/swaylock
-rm -rf ~/.config/swaylock/*
-cp -r ~/a15/arch/dotconfig/swaylock/* ~/.config/swaylock/
-echo "Configuration replaced in ~/.config/swaylock"
+# Check if Waybar started successfully
+sleep 2
+if pgrep waybar > /dev/null; then
+    echo "Waybar started successfully"
+else
+    echo "Failed to start Waybar"
+    exit 1
+fi
 
-# Replace contents of ~/.config/swaync with contents from ~/a15/arch/dotconfig/swaync
-rm -rf ~/.config/swaync/*
-cp -r ~/a15/arch/dotconfig/swaync/* ~/.config/swaync/
-echo "Configuration replaced in ~/.config/swaync"
-
-# Replace contents of ~/.config/wlogout with contents from ~/a15/arch/dotconfig/wlogout
-rm -rf ~/.config/wlogout/*
-cp -r ~/a15/arch/dotconfig/wlogout/* ~/.config/wlogout/
-echo "Configuration replaced in ~/.config/wlogout"
-
-pkill waybar && hyprctl dispatch exec waybar
-echo "Reloaded waybar configuration"
-
+echo "Reloading swaync configuration..."
 swaync-client -R
-echo "Reloaded swaync configuration"
+
+echo "Script completed at $(date)"
