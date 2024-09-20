@@ -27,7 +27,7 @@ backup_file() {
 sudo pacman -Syu --noconfirm
 
 # Install essential packages
-sudo pacman -S base-devel git wget polkit-kde-agent brightnessctl--noconfirm
+sudo pacman -S base-devel git wget polkit-kde-agent brightnessctl --noconfirm
 
 # Install yay for AUR packages
 cd /opt
@@ -37,18 +37,31 @@ cd yay
 makepkg -si --noconfirm
 
 # Install NVIDIA / AMD GPU drivers and utilities
-sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-video-amdgpu --noconfirm
-yay -S libva libva-nvidia-driver-git linux-headers --noconfirm
+sudo pacman -S nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings xf86-video-amdgpu linux-headers --noconfirm
+yay -S libva libva-nvidia-driver-git --noconfirm
 
 # Install ASUS Control and related utilities
-yay -S asusctl rog-control-center supergfxctl power-profiles-daemon waybar-hyprland wlogout swww xdg-desktop-portal-hyprland google-chrome jq pavucontrol telegram-desktop firefox discord keepass timeshift slurp grim swayidle swaylock swaync waybar gucharmap otf-font-awesome ttf-arimo-nerd noto-fonts networkmanager pycharm-community-edition --noconfirm
-sudo pacman -S terraform terragrunt mate-calc acpi psensor --noconfirm
-# Call the Pipewire installation script
-source "$(pwd)/services/pipewire.sh"
+yay -S asusctl rog-control-center supergfxctl power-profiles-daemon --noconfirm
+sudo pacman -S acpi psensor --noconfirm
 
-# Configure NVIDIA settings for Wayland and Hyprland
+# Install Xorg, i3wm, and related packages
+sudo pacman -S xorg-server xorg-apps xorg-xinit i3-wm i3status dmenu terminator networkmanager --noconfirm
+
+# Install additional utilities and applications
+sudo pacman -S pavucontrol firefox keepassxc gucharmap otf-font-awesome ttf-nerd-fonts-symbols noto-fonts --noconfirm
+yay -S google-chrome telegram-desktop discord timeshift pycharm-community-edition --noconfirm
+
+# Enable NetworkManager
+sudo systemctl enable NetworkManager
+
+# Install and enable PipeWire (replacing PulseAudio)
+sudo pacman -S pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber --noconfirm
+systemctl --user enable pipewire pipewire-pulse wireplumber
+systemctl --user start pipewire pipewire-pulse wireplumber
+
+# Configure NVIDIA settings for Xorg
 backup_file "/etc/modprobe.d/nvidia.conf"
-add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1 fbdev=1"
+add_line_if_not_exists "/etc/modprobe.d/nvidia.conf" "options nvidia-drm modeset=1"
 
 # Add NVIDIA modules to mkinitcpio.conf
 backup_file "/etc/mkinitcpio.conf"
@@ -60,31 +73,29 @@ add_module_if_not_exists "nvidia_drm"
 # Generate new initramfs
 sudo mkinitcpio -P
 
-# Set environment variables for Wayland
+# Set environment variables for NVIDIA
 backup_file "$HOME/.bashrc"
 add_line_if_not_exists "$HOME/.bashrc" 'export LIBVA_DRIVER_NAME=nvidia'
-add_line_if_not_exists "$HOME/.bashrc" 'export XDG_SESSION_TYPE=wayland'
-add_line_if_not_exists "$HOME/.bashrc" 'export GBM_BACKEND=nvidia-drm'
 add_line_if_not_exists "$HOME/.bashrc" 'export __GLX_VENDOR_LIBRARY_NAME=nvidia'
-add_line_if_not_exists "$HOME/.bashrc" 'export WLR_NO_HARDWARE_CURSORS=1'
 
 # Create scripts directory in home folder and add it to PATH
 mkdir -p "$HOME/scripts"
 add_line_if_not_exists "$HOME/.bashrc" 'export PATH=$PATH:$HOME/scripts'
-ln -s ~/a15/arch/dotconfig/update_dot.sh ~/scripts/update_dot.sh
+# Example symbolic link (adjust as needed)
+# ln -s ~/a15/arch/dotconfig/update_dot.sh ~/scripts/update_dot.sh
 
 # Reload bashrc
 source "$HOME/.bashrc"
 
 # Enable services for suspend and resume
-sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service power-profiles-daemon.service NetworkManager
-# Fix for GDM login issue
-sudo mkdir -p /etc/systemd/system/gdm.service.d
-sudo bash -c 'echo -e "[Service]\nExecStartPre=/bin/sleep 3" > /etc/systemd/system/gdm.service.d/override.conf'
+sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
 
-# Waybar module for keyboard status (Caps lock and Num lock) requires the user to be part of the “input” group
+# Add user to necessary groups
+sudo gpasswd -a $USER video
 sudo gpasswd -a $USER input
+
+# Set ASUS keyboard backlight (adjust brightness level as needed)
 asusctl -c 80
 
 # Reboot to apply changes
-echo "Installation complete."
+echo "Installation complete. Please reboot your system."
